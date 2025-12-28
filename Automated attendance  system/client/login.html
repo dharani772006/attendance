@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Portal</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+        body {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        .main-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .icon {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .title {
+            color: #0b3d91;
+            margin-top: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            color: rgb(160, 162, 163);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 400px;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            text-align: left;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-control {
+            margin-bottom: 15px;
+        }
+        
+        .login {
+            background-color: #0b3d91;
+            border-color: #0b3d91;
+            font-weight: 600;
+        }
+        
+        .login:hover {
+            background-color: #083070;
+            border-color: #083070;
+        }
+        
+        .register-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .register-link a {
+            color: #0b3d91;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .building-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .role-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .role-card:hover {
+            background: #f9f9f9;
+            border-color: #0b3d91;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .role-icon {
+            font-size: 35px;
+            flex-shrink: 0;
+        }
+        
+        .role-info {
+            flex: 1;
+        }
+        
+        .role-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0b3d91;
+            margin-bottom: 2px;
+        }
+        
+        .role-desc {
+            font-size: 13px;
+            color: #999;
+            margin: 0;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .back-button {
+            margin-top: 15px;
+            background: transparent;
+            color: #0b3d91;
+            border: 2px solid #0b3d91;
+        }
+        
+        .back-button:hover {
+            background: #0b3d91;
+            color: white;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        @media (max-width: 480px) {
+            .icon {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .building-icon {
+                font-size: 50px;
+            }
+            
+            .role-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper"><!-- Role Selection Screen -->
+   <div id="roleSelection" class="icon">
+    <div class="building-icon">
+     🏛️
+    </div>
+    <h1 class="title">Attendance Portal</h1>
+    <p class="subtitle"><span id="instituteNameRole">Jeppiaar Institute of Technology</span><br><span id="portalSubtitleRole">Select Your Role</span></p>
+    <div class="container" style="padding: 0; margin-top: 25px;">
+     <div class="role-card" onclick="showLoginPage('student')">
+      <div class="role-icon">
+       🎓
+      </div>
+      <div class="role-info">
+       <div class="role-name" id="studentRoleTitle">
+        Student
+       </div>
+       <p class="role-desc">Student attendance portal</p>
+      </div>
+     </div>
+     <div class="role-card" onclick="showLoginPage('teacher')">
+      <div class="role-icon">
+       👨‍🏫
+      </div>
+      <div class="role-info">
+       <div class="role-name" id="teacherRoleTitle">
+        Teacher
+       </div>
+       <p class="role-desc">Teacher management portal</p>
+      </div>
+     </div>
+     <div class="role-card" onclick="showLoginPage('management')">
+      <div class="role-icon">
+       💼
+      </div>
+      <div class="role-info">
+       <div class="role-name" id="managementRoleTitle">
+        Principal
+       </div>
+       <p class="role-desc">Management dashboard</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Login Form Screen -->
+   <div id="loginScreen" class="icon hidden">
+    <div class="building-icon">
+     🏛️
+    </div>
+    <h1 class="title" id="loginTitle">Principal Login</h1>
+    <p class="subtitle"><span id="instituteName">Jeppiaar Institute of Technology</span><br><span id="portalSubtitle">Registration Portal</span></p>
+    <div class="container">
+     <div id="errorMessage" class="error-message"></div>
+     <div id="successMessage" class="success-message"></div>
+     <form onsubmit="return validateForm(event)">
+      <div class="form-group"><label for="email" class="form-label"> <span id="emailLabel">Email or Phone Number</span> <span style="color: red;">*</span> </label> <input type="text" class="form-control" id="email" placeholder="��" required>
+      </div>
+      <div class="form-group"><label for="password" class="form-label"> <span id="passwordLabel">Password</span> <span style="color: red;">*</span> </label> <input type="password" class="form-control" id="password" placeholder="🔒 Enter Password" required>
+      </div><button type="submit" class="login btn btn-primary active btn-block"> <span id="loginButton">Login</span> </button>
+     </form><button class="btn btn-block back-button" onclick="backToRoles()">← Back to Roles</button>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            background_color: "#f5f5f5",
+            card_background: "#ffffff",
+            primary_color: "#0b3d91",
+            text_color: "#333333",
+            link_color: "#0b3d91",
+            institute_name: "Jeppiaar Institute of Technology",
+            portal_subtitle: "Registration Portal",
+            student_title: "Student Login",
+            teacher_title: "Teacher Login",
+            management_title: "Principal Login",
+            email_label: "Email or Phone Number",
+            password_label: "Password",
+            login_button: "Login",
+            register_text: "Don't have an account? Register here",
+            font_family: "Arial",
+            font_size: 16
+        };
+
+        let currentRole = '';
+
+        async function onConfigChange(config) {
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            
+            // Apply colors
+            document.querySelector('.main-wrapper').style.backgroundColor = config.background_color || defaultConfig.background_color;
+            document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
+            
+            const iconCards = document.querySelectorAll('.icon');
+            iconCards.forEach(card => {
+                card.style.backgroundColor = config.card_background || defaultConfig.card_background;
+            });
+            
+            const loginBtn = document.querySelector('.login');
+            if (loginBtn) {
+                loginBtn.style.backgroundColor = config.primary_color || defaultConfig.primary_color;
+                loginBtn.style.borderColor = config.primary_color || defaultConfig.primary_color;
+            }
+            
+            const titles = document.querySelectorAll('.title, .role-name');
+            titles.forEach(title => {
+                title.style.color = config.primary_color || defaultConfig.primary_color;
+            });
+            
+            const links = document.querySelectorAll('.register-link a, .back-button');
+            links.forEach(link => {
+                link.style.color = config.link_color || defaultConfig.link_color;
+                if (link.classList.contains('back-button')) {
+                    link.style.borderColor = config.link_color || defaultConfig.link_color;
+                }
+            });
+            
+            // Apply font
+            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            
+            // Update text content
+            document.getElementById('instituteName').textContent = config.institute_name || defaultConfig.institute_name;
+            document.getElementById('instituteNameRole').textContent = config.institute_name || defaultConfig.institute_name;
+            document.getElementById('portalSubtitleRole').textContent = config.portal_subtitle || defaultConfig.portal_subtitle;
+            document.getElementById('portalSubtitle').textContent = config.portal_subtitle || defaultConfig.portal_subtitle;
+            document.getElementById('emailLabel').textContent = config.email_label || defaultConfig.email_label;
+            document.getElementById('passwordLabel').textContent = config.password_label || defaultConfig.password_label;
+            document.getElementById('loginButton').textContent = config.login_button || defaultConfig.login_button;
+            
+            // Update register link text
+            const registerLinkDiv = document.getElementById('registerLink');
+            const config_text = config.register_text || defaultConfig.register_text;
+            if (config_text.includes('Register here')) {
+                const parts = config_text.split('Register here');
+                registerLinkDiv.innerHTML = parts[0] + '<a href="#" onclick="showRegisterMessage(event)">Register here</a>' + (parts[1] || '');
+            } else {
+                registerLinkDiv.innerHTML = config_text;
+            }
+            
+            // Store role titles in config
+            document.getElementById('studentRoleTitle').textContent = config.student_title ? config.student_title.replace(' Login', '') : 'Student';
+            document.getElementById('teacherRoleTitle').textContent = config.teacher_title ? config.teacher_title.replace(' Login', '') : 'Teacher';
+            document.getElementById('managementRoleTitle').textContent = config.management_title ? config.management_title.replace(' Login', '') : 'Principal';
+        }
+
+        function showLoginPage(role) {
+            currentRole = role;
+            const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+            
+            let title = '';
+            if (role === 'student') {
+                title = config.student_title || defaultConfig.student_title;
+            } else if (role === 'teacher') {
+                title = config.teacher_title || defaultConfig.teacher_title;
+            } else {
+                title = config.management_title || defaultConfig.management_title;
+            }
+            
+            document.getElementById('loginTitle').textContent = title;
+            document.getElementById('roleSelection').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            
+            // Clear form
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            hideMessages();
+        }
+
+        function backToRoles() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('roleSelection').classList.remove('hidden');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            hideMessages();
+        }
+
+        function validateForm(event) {
+            event.preventDefault();
+            
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+
+            hideMessages();
+
+            // Check if email is empty
+            if (email === "") {
+                showError("Please enter your email or phone number!");
+                return false;
+            }
+
+            // Check if email contains @ symbol
+            if (!email.includes("@")) {
+                showError("Please enter a valid email with '@' symbol!");
+                return false;
+            }
+
+            // Basic email format validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showError("Please enter a valid email format (e.g., user@example.com)");
+                return false;
+            }
+
+            // Check if password is empty
+            if (password === "") {
+                showError("Please enter your password!");
+                return false;
+            }
+
+            // Check password length
+            if (password.length < 6) {
+                showError("Password must be at least 6 characters long!");
+                return false;
+            }
+
+            // Check if password contains at least one number
+            if (!/\d/.test(password)) {
+                showError("Password must contain at least one number!");
+                return false;
+            }
+
+            // All validations passed
+            showSuccess(`Login successful! Welcome ${currentRole}!`);
+            
+            setTimeout(() => {
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                hideMessages();
+            }, 2000);
+
+            return false;
+        }
+
+        function showRegisterMessage(event) {
+            event.preventDefault();
+            showSuccess("Registration page coming soon! Please contact administrator.");
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        const capabilities = {
+            recolorables: [
+                {
+                    get: () => window.elementSdk.config.background_color || defaultConfig.background_color,
+                    set: (value) => {
+                        window.elementSdk.config.background_color = value;
+                        window.elementSdk.setConfig({ background_color: value });
+                    }
+                },
+                {
+                    get: () => window.elementSdk.config.card_background || defaultConfig.card_background,
+                    set: (value) => {
+                        window.elementSdk.config.card_background = value;
+                        window.elementSdk.setConfig({ card_background: value });
+                    }
+                },
+                {
+                    get: () => window.elementSdk.config.text_color || defaultConfig.text_color,
+                    set: (value) => {
+                        window.elementSdk.config.text_color = value;
+                        window.elementSdk.setConfig({ text_color: value });
+                    }
+                },
+                {
+                    get: () => window.elementSdk.config.primary_color || defaultConfig.primary_color,
+                    set: (value) => {
+                        window.elementSdk.config.primary_color = value;
+                        window.elementSdk.setConfig({ primary_color: value });
+                    }
+                },
+                {
+                    get: () => window.elementSdk.config.link_color || defaultConfig.link_color,
+                    set: (value) => {
+                        window.elementSdk.config.link_color = value;
+                        window.elementSdk.setConfig({ link_color: value });
+                    }
+                }
+            ],
+            borderables: [],
+            fontEditable: {
+                get: () => window.elementSdk.config.font_family || defaultConfig.font_family,
+                set: (value) => {
+                    window.elementSdk.config.font_family = value;
+                    window.elementSdk.setConfig({ font_family: value });
+                }
+            },
+            fontSizeable: {
+                get: () => window.elementSdk.config.font_size || defaultConfig.font_size,
+                set: (value) => {
+                    window.elementSdk.config.font_size = value;
+                    window.elementSdk.setConfig({ font_size: value });
+                }
+            }
+        };
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: () => capabilities,
+                mapToEditPanelValues: (config) => new Map([
+                    ["institute_name", config.institute_name || defaultConfig.institute_name],
+                    ["portal_subtitle", config.portal_subtitle || defaultConfig.portal_subtitle],
+                    ["student_title", config.student_title || defaultConfig.student_title],
+                    ["teacher_title", config.teacher_title || defaultConfig.teacher_title],
+                    ["management_title", config.management_title || defaultConfig.management_title],
+                    ["email_label", config.email_label || defaultConfig.email_label],
+                    ["password_label", config.password_label || defaultConfig.password_label],
+                    ["login_button", config.login_button || defaultConfig.login_button],
+                    ["register_text", config.register_text || defaultConfig.register_text]
+                ])
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ae4ca03d5e07f8b',t:'MTc2NTc4OTYzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
